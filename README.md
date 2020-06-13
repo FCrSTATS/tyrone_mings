@@ -8,7 +8,7 @@ I will be adding new functions as and when I write them. This is a package built
 
 ### Installation 
 Avaliable for download with pip
-```python
+```
 pip install tyrone_mings
 ```
 
@@ -25,14 +25,14 @@ Each league has a base page i.e. https://www.transfermarkt.com/premier-league/st
 #### get_club_urls_from_league_page()
 Takes a league's base page and returns a list of urls for each club's base page for that season.
 
-```
+```python
 club_urls = get_club_urls_from_league_page("https://www.transfermarkt.com/premier-league/startseite/wettbewerb/GB1")
 ```
 
 #### get_player_urls_from_league_page()
 Takes a league's base page and returns a list of urls for each player's base page from all clubs. To track progress add verbose = True to print the name of each club once their players are added.
 
-```
+```python
 player_urls = get_player_urls_from_league_page("https://www.transfermarkt.com/premier-league/startseite/wettbewerb/GB1", verbose = True)
 ```
 
@@ -42,7 +42,7 @@ Each club has a base page i.e. https://www.transfermarkt.com/aston-villa/startse
 #### get_player_urls_from_club_page()
 Takes a club's base page and returns a list of urls for each player's base page.
 
-```
+```python
 player_urls = get_player_urls_from_club_page("https://www.transfermarkt.com/manchester-united/startseite/verein/985/saison_id/2019")
 ```
 
@@ -55,7 +55,7 @@ The user can chose to write the returning information to csv or to a pandas data
 ##### Player Bio
 Player Bio collects the player id, player name,	day of birth,	month of birth,	year of birth, place of birth, country of birth, other citizenship, playing position, height and preferred foot. This are mostly static information about the player.
 
-```
+```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
 bio = tm_pull(player_page, player_bio = True, output = 'pandas')
 print(bio)
@@ -63,7 +63,7 @@ print(bio)
 
 ##### Player Status
 Player Status collects the player id, current club, country of current club, current market value,	date joined current club, contract expiry date, contract option, loaning club,	country of loaning club, loan expiry date and players' agent. This are mostly static information about the player.
-```
+```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
 status = tm_pull(player_page, player_status = True, output = 'pandas')
 print(status)
@@ -71,7 +71,7 @@ print(status)
 
 ##### Transfer History
 Transfer History collects the player id, club transferred from, club transferred to, market value,	transfer fee paid, transfer date, season of season, country transferred to,	country transferred from, type of	transfer,	in-club or between-clubs transfer, player age at point of transfer and all youth clubs.
-```
+```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
 transfer_data = tm_pull(player_page, transfer_history = True, output = 'pandas')
 print(transfer_data)
@@ -79,7 +79,7 @@ print(transfer_data)
 
 ##### Performance History
 Performance History collects, for each competition and season, the player id, season , competition, competition, code, club, in squad, appearances, ppg, goals, assists, subbed on, subbed off, yellow card, second yellow card, red card, penalties, mins_played, clean sheets, goals conceded and age at the start of the season.
-```
+```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
 performance_data = tm_pull(player_page, performance_history = True, output = 'pandas')
 print(performance_data)
@@ -87,7 +87,7 @@ print(performance_data)
 
 ##### Market Value History
 Tranfermarkt calculate a market value for each player in the world which is updated 1-3 times a year. Market Value History collects the player id, club,	market value,	date of calculation and the player's age at point of calculation.
-```
+```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
 market_value_data = tm_pull(player_page, market_value_history = True, output = 'pandas')
 print(market_value_data)
