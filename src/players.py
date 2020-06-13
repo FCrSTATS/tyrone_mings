@@ -6,7 +6,6 @@ import js2xml
 import datetime
 from .leaguesclubs import *
 
-
 def bio_player_pull(pageSoup, player_id):
 
 ############# ADD SECONDARY POSITION INFO #################### #TODO
@@ -724,7 +723,7 @@ def tm_pull(player_page,
     raw_base_page = get_souped_page(player_page)
 
     bio = bio_player_pull(raw_base_page, player_id)
-    output_list = []
+    output_dict = {}
 
     player_dob = bio['dob']
 
@@ -733,8 +732,7 @@ def tm_pull(player_page,
 
         # pandas output
         if output == "pandas":
-            x = pd.DataFrame.from_dict(bio, orient = "index").transpose()
-            output_list.append(x)
+            output_dict['player_bio'] = pd.DataFrame.from_dict(bio, orient = "index").transpose()
 
         # csv output
         elif output == "csv":
@@ -750,8 +748,7 @@ def tm_pull(player_page,
 
         # pandas output
         if output == "pandas":
-            x = pd.DataFrame.from_dict(status, orient = "index").transpose()
-            output_list.append(x)
+            output_dict['player_status'] = pd.DataFrame.from_dict(status, orient = "index").transpose()
 
         # csv output
         elif output == "csv":
@@ -767,7 +764,7 @@ def tm_pull(player_page,
 
         # pandas output
         if output == "pandas":
-            output_list.append(transfers)
+            output_dict['transfer_history'] = transfers
 
         # csv output
         elif output == "csv":
@@ -781,7 +778,7 @@ def tm_pull(player_page,
 
         # pandas output
         if output == "pandas":
-            output_list.append(historic_market_value)
+            output_dict['market_value_history'] = historic_market_value
 
         # csv output
         elif output == "csv":
@@ -795,7 +792,7 @@ def tm_pull(player_page,
 
         # pandas output
         if output == "pandas":
-            output_list.append(perf_data)
+            output_dict['performance_history'] = perf_data
 
         # csv output
         elif output == "csv":
@@ -803,4 +800,4 @@ def tm_pull(player_page,
 
     # return all pandas output
     if output == "pandas":
-        return(output_list)
+        return(output_dict)
