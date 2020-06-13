@@ -50,45 +50,45 @@ player_urls = get_player_urls_from_club_page("https://www.transfermarkt.com/manc
 Each player has a base profile page i.e. https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677. However, there are a multitude of other pages covering information such as performance data, national team data etc. The pull_tm function help access information from these pages. Getting all of this information per player can take about 7s, so the user has the option to select which information should be collected.
 
 ##### Output
-The user can chose to write the returning information to csv or to a pandas dataframe via output = "csv" or output = "pandas" respectively.
+The user can chose to write the returning information to csv or to a dictionary of pandas dataframe via output = "csv" or output = "pandas" respectively.
 
 ##### Player Bio
 Player Bio collects the player id, player name,	day of birth,	month of birth,	year of birth, place of birth, country of birth, other citizenship, playing position, height and preferred foot. This are mostly static information about the player.
 
 ```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
-bio = tm_pull(player_page, player_bio = True, output = 'pandas')
-print(bio)
+output_dict = tm_pull(player_page, player_bio = True, output = 'pandas')
+print(output_dict['player_bio'])
 ```
 
 ##### Player Status
 Player Status collects the player id, current club, country of current club, current market value,	date joined current club, contract expiry date, contract option, loaning club,	country of loaning club, loan expiry date and players' agent. This are mostly static information about the player.
 ```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
-status = tm_pull(player_page, player_status = True, output = 'pandas')
-print(status)
+output_dict = tm_pull(player_page, player_status = True, output = 'pandas')
+print(output_dict['player_status'])
 ```
 
 ##### Transfer History
 Transfer History collects the player id, club transferred from, club transferred to, market value,	transfer fee paid, transfer date, season of season, country transferred to,	country transferred from, type of	transfer,	in-club or between-clubs transfer, player age at point of transfer and all youth clubs.
 ```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
-transfer_data = tm_pull(player_page, transfer_history = True, output = 'pandas')
-print(transfer_data)
+output_dict = tm_pull(player_page, transfer_history = True, output = 'pandas')
+print(output_dict['transfer_history'])
 ```
 
 ##### Performance History
 Performance History collects, for each competition and season, the player id, season , competition, competition, code, club, in squad, appearances, ppg, goals, assists, subbed on, subbed off, yellow card, second yellow card, red card, penalties, mins_played, clean sheets, goals conceded and age at the start of the season.
 ```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
-performance_data = tm_pull(player_page, performance_history = True, output = 'pandas')
-print(performance_data)
+output_dict = tm_pull(player_page, performance_data = True, output = 'pandas')
+print(output_dict['performance_data'])
 ```
 
 ##### Market Value History
 Tranfermarkt calculate a market value for each player in the world which is updated 1-3 times a year. Market Value History collects the player id, club,	market value,	date of calculation and the player's age at point of calculation.
 ```python
 player_page = "https://www.transfermarkt.com/tyrone-mings/profil/spieler/253677"
-market_value_data = tm_pull(player_page, market_value_history = True, output = 'pandas')
-print(market_value_data)
+output_dict = tm_pull(player_page, market_value_history = True, output = 'pandas')
+print(output_dict['market_value_history'])
 ```
