@@ -14,6 +14,13 @@ setup(
     url="https://github.com/FCrSTATS/tyrone_mings",
     package_dir={'tyrone_mings': 'src'},
     packages=['tyrone_mings'],
+    install_requires=[
+        'lxml>=4.5.0',
+        'requests>=2.0.0',
+        'bs4==0.0.1',
+        'js2xml==0.3.1',
+        'pandas>=0.23.4'
+    ],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

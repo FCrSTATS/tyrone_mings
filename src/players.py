@@ -1,17 +1,9 @@
 
 import pandas as pd
-from bs4 import BeautifulSoup
-import requests
-import io
 import re
-import datetime
-from datetime import date
-import numpy as np
 import csv
-from lxml import etree
 import js2xml
-from tools import *
-from leaguesclubs import *
+from .leaguesclubs import *
 
 
 def bio_player_pull(pageSoup, player_id):

@@ -1,4 +1,4 @@
-from tools import *
+from .tools import *
 
 
 def get_club_urls_from_league_page(club_url):

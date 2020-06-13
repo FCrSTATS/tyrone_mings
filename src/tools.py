@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import datetime
 from lxml import etree
 
 
