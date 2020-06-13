@@ -715,7 +715,7 @@ def tm_pull(player_page,
             player_bio = False,
             player_status = False,
             transfer_history = False,
-            performance_history = False,
+            performance_data = False,
             market_value_history = False,
             output = "pandas" ):
 
@@ -792,7 +792,7 @@ def tm_pull(player_page,
 
         # pandas output
         if output == "pandas":
-            output_dict['performance_history'] = perf_data
+            output_dict['performance_data'] = perf_data
 
         # csv output
         elif output == "csv":
