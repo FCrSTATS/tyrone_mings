@@ -65,3 +65,31 @@ def get_player_urls_from_league_page(league_url, verbose = False):
         if verbose:
             print(c.split("/")[3].replace("-", " "), "players added")
     return(players)
+
+def get_league_mean_player_value_for_season(league_url, season):
+    '''
+    From a league page such as :
+    https://www.transfermarkt.com/premier-league/startseite/wettbewerb/GB1
+    retrived the mean Transfermarkt player valuation for the league in a season
+    '''
+    # change url to include season
+    league_url = league_url + '/plus/?saison_id=' + season
+    # load table as html
+    league_base_page = get_souped_page(league_url)
+    div = league_base_page.findAll('div', {'class':'responsive-table'})[0]
+    data_table = div.find('table')
+    # return dummy if values are not available
+    if data_table.find('tr').findAll('th')[-1].text !='ø MV':
+      return 0
+    # get table body
+    dt_body = data_table.find('tbody')
+    # for every row, get value of the last column and translate into an integer
+    results = []
+    for row in dt_body.findAll('tr'):
+      val = row.findAll('td')[-1].text
+      if val == '-':
+        val = '0'
+      else:
+        val = val.replace('€','').replace('m','0000').replace('Th','000').replace('.','')
+      results.append(int(val))
+    return np.mean(results)
