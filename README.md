@@ -6,6 +6,19 @@ The tyrone_mings package aims to help people access the information with relativ
 
 I will be adding new functions as and when I write them. This is a package built out of a frustration that I have lots of snippets of code dotted around and wanted a home for my existing stuff as well as new stuff I write.
 
+### Installation 
+Avaliable for download with pip
+```python
+pip install tyrone_mings
+```
+
+Then import into python with either:
+```python
+from tyrone_mings import * 
+#or
+import tyrone_mings as tm
+```
+
 ### Leagues
 Each league has a base page i.e. https://www.transfermarkt.com/premier-league/startseite/wettbewerb/GB1. By default the base page contains info about the current season but can be adjusted to show any previous season. The following functions help access information from these pages.
 
