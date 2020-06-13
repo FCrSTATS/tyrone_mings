@@ -1,2 +1,3 @@
-from leaguesclubs import *
-from tools import *
+from src.leaguesclubs import *
+from src.tools import *
+from src.players import *
