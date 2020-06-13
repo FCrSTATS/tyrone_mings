@@ -198,6 +198,7 @@ def current_football_bio_player_pull(pageSoup, player_id):
 
 def transfer_history_pull(pageSoup, player_id):
 
+
     transfered_from = []
     transferred_to = []
     market_values = []
@@ -426,10 +427,7 @@ def transfer_history_pull(pageSoup, player_id):
     else:
         player_view['all_youth_clubs'] = remove_youth(player_view.tail(1).iloc[0]['transfered_from'])
 
-
     return(player_view)
-
-
 
 
 def performance_history_pull(base_url, player_id, player_dob):
@@ -465,7 +463,6 @@ def performance_history_pull(base_url, player_id, player_dob):
         position_profile = "OUTFIELD"
 
     if position_profile == "OUTFIELD":
-
         for row in perf_table.select('tr')[2::]:
             season = row.select('td')[0].get_text()
             competition = row.select('td')[2].get_text()
@@ -527,7 +524,6 @@ def performance_history_pull(base_url, player_id, player_dob):
             goals_conceded_list.append(goals_conceded)
 
     else:
-
         for row in perf_table.select('tr')[2::]:
             season = row.select('td')[0].get_text()
             competition = row.select('td')[2].get_text()
@@ -609,6 +605,7 @@ def performance_history_pull(base_url, player_id, player_dob):
             'goals_conceded': goals_conceded_list
             })
 
+
     performance_data['player_id'] = player_id
 
     age = []
@@ -629,6 +626,7 @@ def performance_history_pull(base_url, player_id, player_dob):
         age.append(calculate_age(player_dob, competition_start_date))
 
     performance_data['age'] = age
+
     return(performance_data)
 
 def market_value_historic_pull(base_url, player_id):
@@ -765,19 +763,16 @@ def tm_pull(player_page,
     ### if the user has selected to pull player_transfers data then run
     if transfer_history:
 
-        tranfers = transfer_history_pull(raw_base_page, player_id)
+        transfers = transfer_history_pull(raw_base_page, player_id)
 
         # pandas output
         if output == "pandas":
-            output_list.append(tranfers)
+            output_list.append(transfers)
 
         # csv output
         elif output == "csv":
-            tranfers.to_csv((data_folder + player_id + '_transfer_history.csv'), index = False)
+            transfers.to_csv((data_folder + player_id + '_transfer_history.csv'), index = False)
 
-    # return all pandas output
-    if output == "pandas":
-        return(output_list)
 
     ### if the user has selected to pull market_value_history data then run
     if market_value_history:
@@ -795,6 +790,7 @@ def tm_pull(player_page,
 
     ### if the user has selected to pull performance data then run
     if performance_history:
+
         perf_data = performance_history_pull(player_page, player_id, player_dob)
 
         # pandas output
