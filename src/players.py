@@ -786,7 +786,7 @@ def tm_pull(player_page,
 
 
     ### if the user has selected to pull performance data then run
-    if performance_history:
+    if performance_data:
 
         perf_data = performance_history_pull(player_page, player_id, player_dob)
 
