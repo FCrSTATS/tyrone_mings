@@ -3,3 +3,4 @@ from .tools import *
 from .players import *
 from .matches import *
 from .fixtures import *
+from .transfers import *
