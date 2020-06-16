@@ -163,15 +163,15 @@ def get_match_data(match_soup, match_info, match_url):
                     # 1. find other edge cases for shot_foot
                     # 2. deal with own goals (WC final), to better represent the assist info
                     # 3. deal with penalties (WC final), to better represent the assist info
-                    try:
-                        if "," in assist_raw:
-                            assist_type_list.append(assist_raw.split(",")[1].lower().strip())
-                        elif 'Handball by' in assist_raw:
-                            assist_type_list.append("handball")
-                        else:
-                            assist_type_list.append(None)
-                    except:
-                        assist_type_list.append(None)
+#                     try:
+#                         if "," in assist_raw:
+#                             assist_type_list.append(assist_raw.split(",")[1].lower().strip())
+#                         elif 'Handball by' in assist_raw:
+#                             assist_type_list.append("handball")
+#                         else:
+#                             assist_type_list.append(None)
+#                     except:
+#                         assist_type_list.append(None)
                 else:
                     assisting_player_name_list.append(None)
                     assisting_player_id_list.append(None)
@@ -210,7 +210,7 @@ def get_match_data(match_soup, match_info, match_url):
             'minute': minute_list,
             'assisting_player_name': assisting_player_name_list,
             'assisting_player_id': assisting_player_id_list,
-            'assist_type': assist_type_list
+#             'assist_type': assist_type_list
             })
 
             # TODO add the right team and id for the scoring team
