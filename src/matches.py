@@ -124,7 +124,7 @@ def get_match_data(match_soup, match_info, match_url):
     minute_list = []
     assisting_player_name_list = []
     assisting_player_id_list = []
-    assist_type_list = []
+#     assist_type_list = []
 
     if match_soup.find("div", {"id": "sb-tore"}) != None:
         for li in match_soup.find("div", {"id": "sb-tore"}).select('li'):
@@ -175,7 +175,7 @@ def get_match_data(match_soup, match_info, match_url):
                 else:
                     assisting_player_name_list.append(None)
                     assisting_player_id_list.append(None)
-                    assist_type_list.append(None)
+#                     assist_type_list.append(None)
 
             ## get minutes
             bgPosCols, bgPosRows = map(int, li.select('span.sb-sprite-uhr-klein')[0]['style'].replace("background-position: ", "").replace(";", "").replace("px", "").split(" "))
@@ -209,7 +209,7 @@ def get_match_data(match_soup, match_info, match_url):
             'shot_foot': shot_foot_list,
             'minute': minute_list,
             'assisting_player_name': assisting_player_name_list,
-            'assisting_player_id': assisting_player_id_list,
+            'assisting_player_id': assisting_player_id_list
 #             'assist_type': assist_type_list
             })
 
