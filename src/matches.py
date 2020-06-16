@@ -168,6 +168,8 @@ def get_match_data(match_soup, match_info, match_url):
                             assist_type_list.append(assist_raw.split(",")[1].lower().strip())
                         elif 'Handball by' in assist_raw:
                             assist_type_list.append("handball")
+                        else:
+                            assist_type_list.append(None)
                     except:
                         assist_type_list.append(None)
                 else:
