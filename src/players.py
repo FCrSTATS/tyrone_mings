@@ -5,6 +5,7 @@ import csv
 import js2xml
 import datetime
 from .leaguesclubs import *
+import warnings
 
 def bio_player_pull(pageSoup, player_id):
 
@@ -801,3 +802,71 @@ def tm_pull(player_page,
     # return all pandas output
     if output == "pandas":
         return(output_dict)
+
+def squad_number_history(base_url, player_id, squad_type = "both"):
+    '''
+    This method returns the squad numbers history of a player.
+
+    Squad numbers history is returned according to the squad type. If the squad type is both,
+    then the squad numbers of the players representation for both club and country is returned.
+
+    Args:
+    -----------
+        base_url: transfermarkt url of the player, string
+        player_id: Id of the player, string
+        squad_type: The type of squad. Default - both. Can be one of ["club", "country", "both], string
+    
+    Returns:
+    -----------
+        squad_df: History of squad numbers of the player, Pandas DataFrame
+    
+    Raises:
+    -----------
+        Only User Warnings are raised when the squad type doesn't match with one of the 3 options and
+        if the player hasn't played for his country and the user requested for both squad numbers.
+    '''
+
+    # Check if the squad type is in one of the 3 options
+    if squad_type not in ["club", "country", "both"]:
+        warnings.warn("Unsupported squad type", UserWarning)
+        return None
+    
+    # Scrape the squad number page.
+    souped_page = get_souped_page(base_url.replace("profil", "rueckennummern"))
+    
+    #Get the tables with the data directly.
+    tables = souped_page.findAll("table", {"class": "items"})
+
+    # Get the columns and add a user defined column
+    columns = [col.get_text() for col in tables[0].findAll("th") if col.get_text() != ""]
+    columns.append("squad_type")
+
+    # Checking if the player has played for his country
+    if squad_type == "both" and len(tables) == 1:
+        isNationalAvailable = False
+    else:
+        isNationalAvailable = True
+    values = []
+
+    #Parsing the club squad numbers
+    if squad_type in ["both", "club"]:
+        for row in tables[0].findAll("tr"):
+            row_elem = [val.get_text() for val in row.findAll("td") if val.get_text() != ""]
+            if len(row_elem) > 0:
+                row_elem.append("club")
+                values.append(row_elem)
+
+    #Parsing the coutry squad numbers
+    if squad_type in ["both", "country"] and isNationalAvailable:
+        for row in tables[1].findAll("tr"):
+            row_elem = [val.get_text() for val in row.findAll("td") if val.get_text() != ""]
+            if len(row_elem) > 0:
+                row_elem.append("country")
+                values.append(row_elem)
+    else:
+        warnings.warn("Player hasn't played for his country", UserWarning)
+    
+    # pandas dataframe output
+    squad_df = pd.DataFrame(values, columns=columns)
+    squad_df["player_id"] = player_id
+    return squad_df
