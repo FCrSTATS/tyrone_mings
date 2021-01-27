@@ -620,7 +620,7 @@ def performance_history_pull(base_url, player_id, player_dob):
             competition_start_date = datetime.date(year, 8, 1)
 
         else:
-            year = int(year)
+            year = int(s)
             competition_start_date = datetime.date(year, 4, 1)
 
         age.append(calculate_age(player_dob, competition_start_date))
