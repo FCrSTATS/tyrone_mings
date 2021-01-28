@@ -293,9 +293,6 @@ def transfer_history_pull(pageSoup, player_id):
             try:
                 date_raw = ""
                 date_raw = row.select('td')[1].get_text().strip()#.get_text())#.select('img')[0].get('alt')
-                if 'Date' in date_raw:
-                date_raw = ""
-                date_raw = row.select('td')[1].get_text().strip()#.get_text())#.select('img')[0].get('alt')
                 year_of_transfer = int(date_raw[len(date_raw)-4:])
                 month_of_transfer = month_to_number(date_raw.split(" ")[0])
                 day_of_transfer = int(date_raw.split(" ")[1].split(",")[0])
