@@ -33,6 +33,9 @@ def bio_player_pull(pageSoup, player_id):
                 POB = row.select('td')[0].get_text().strip()
                 COB = row.select('td')[0].select('img')[0]['alt']
 
+            if row.select('th')[0].get_text().strip() == "Position:":
+                position = row.select('td')[0].get_text().strip()
+
             if row.select('th')[0].get_text().strip() == "Age:":
                 age = int(row.select('td')[0].get_text().strip())
 
@@ -162,15 +165,19 @@ def current_football_bio_player_pull(pageSoup, player_id):
 
     if contract_expires != None:
         if contract_expires != "-":
-            day_expires, month_expires, year_expires = contract_expires.split(".")
-            contract_expires = datetime.date(int(year_expires), int(month_expires), int(day_expires))
+            year_expired = int(contract_expires[len(contract_expires)-4:])
+            month_expired = month_to_number(contract_expires.split(" ")[0])
+            day_expired = int(contract_expires.split(" ")[1].split(",")[0])
+            contract_expires = datetime.date(year_expired, month_expired, day_expired)
         else:
             contract_expires = None
 
     if loan_contract_expiry != None:
         if loan_contract_expiry != "-":
-            day_expires, month_expires, year_expires = loan_contract_expiry.split(".")
-            loan_contract_expiry = datetime.date(int(year_expires), int(month_expires), int(day_expires))
+            year_expires = int(loan_contract_expiry[len(loan_contract_expiry)-4:])
+            month_expires = month_to_number(loan_contract_expiry.split(" ")[0])
+            day_expires = int(loan_contract_expiry.split(" ")[1].split(",")[0])
+            loan_contract_expiry = datetime.date(year_expires, month_expires, day_expires)
         else:
             loan_contract_expiry = None
 
