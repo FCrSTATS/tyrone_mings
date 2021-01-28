@@ -222,7 +222,7 @@ def transfer_history_pull(pageSoup, player_id):
         if not_first_row:
             not_first_row = True
 
-            for row in box.select('tr')[2:]:
+            for row in box.select('tr')[1:]:
                 try:
                     transfered_from_value = row.select('td')[4].select('a')[0].get('href').split("/")[1].replace("-", " ")
 #                 if transfered_from_value == ""
@@ -230,9 +230,9 @@ def transfer_history_pull(pageSoup, player_id):
                 except:
                     pass
 
-            for row in box.select('tr')[2:]:
+            for row in box.select('tr')[1:]:
                 try:
-                    transferred_to_value = row.select('td')[8].select('a')[0].get('href').split("/")[1].replace("-", " ")
+                    transferred_to_value = row.select('td')[7].select('a')[0].get('href').split("/")[1].replace("-", " ")
                     transferred_to.append(transferred_to_value)
                 except:
                     pass
