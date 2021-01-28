@@ -291,7 +291,7 @@ def transfer_history_pull(pageSoup, player_id):
         ## grab TRANSFER DATE
         for row in box.select('tr')[1:]:
             try:
-                date_raw = ""
+                date_raw = "" #removed if clause to get this to work. Is it still necessary?
                 date_raw = row.select('td')[1].get_text().strip()#.get_text())#.select('img')[0].get('alt')
                 year_of_transfer = int(date_raw[len(date_raw)-4:])
                 month_of_transfer = month_to_number(date_raw.split(" ")[0])
@@ -365,7 +365,7 @@ def transfer_history_pull(pageSoup, player_id):
         else:
             internal_transfer.append("external")
 
-    country_from = country_from[:-1]
+    ## this seems to break this function. Is it still necessary country_from = country_from[:-1]
 
     DOB = None
 
