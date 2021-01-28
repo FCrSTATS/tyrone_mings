@@ -237,7 +237,7 @@ def transfer_history_pull(pageSoup, player_id):
                 except:
                     pass
 
-            for row in box.select('tr')[2:]:
+            for row in box.select('tr')[1:]:
                 try:
                     market_values_value = row.select('td.zelle-mw')[0].get_text()#.select('img')[0].get('alt')
 
@@ -256,7 +256,7 @@ def transfer_history_pull(pageSoup, player_id):
 
 
         ## grab COUNTRY TO
-            for row in box.select('tr')[2:]:
+            for row in box.select('tr')[1:]:
                 try:
                     no_images = len(row.select('td')[7].select('img'))
                     if no_images > 0:
@@ -268,7 +268,7 @@ def transfer_history_pull(pageSoup, player_id):
 
 
         ## grab COUNTRY FROM
-            for row in box.select('tr')[2:]:
+            for row in box.select('tr')[1:]:
                 try:
                     no_images = len(row.select('td')[3].select('img'))
                     if no_images > 0:
@@ -280,7 +280,7 @@ def transfer_history_pull(pageSoup, player_id):
 
 
         ## grab TRANSFER FEE
-        for row in box.select('tr')[2:]:
+        for row in box.select('tr')[1:]:
             try:
                 transfer_fees_raw = row.select('td.zelle-abloese')[0].get_text()
                 transfer_fees.append(transfer_fees_raw)
