@@ -243,8 +243,8 @@ def transfer_history_pull(pageSoup, player_id):
 
                     if "m" in market_values_value:
                         market_values_value = int( float(market_values_value.replace("€","").replace("m","")) * 1000000 )
-                    elif "k" in market_values_value:
-                        market_values_value = int(market_values_value.replace("€","").replace("k","")) * 1000
+                    elif "Th." in market_values_value:
+                        market_values_value = int(market_values_value.replace("€","").replace("Th.","")) * 1000
                     elif "-":
                         market_values_value = 0
 
@@ -340,7 +340,7 @@ def transfer_history_pull(pageSoup, player_id):
             if "m" in transfer_fees[t]:
                 transfer_fees_new.append( int( float( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("m", "") ) * 1000000 ) )
             else:
-                transfer_fees_new.append( int( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("k", "") ) * 1000 )
+                transfer_fees_new.append( int( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("Th.", "") ) * 1000 )
 
         elif transfer_fees[t] == "?":
             transfer_fees_new.append(market_values[t])
@@ -348,8 +348,8 @@ def transfer_history_pull(pageSoup, player_id):
         elif "m" in transfer_fees[t]:
             transfer_fees_new.append( int( float( transfer_fees[t].replace("€", "").replace("m", "") ) * 1000000 ) )
 
-        elif "k" in transfer_fees[t]:
-            transfer_fees_new.append( int( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("k", "") ) * 1000 )
+        elif "Th." in transfer_fees[t]:
+            transfer_fees_new.append( int( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("Th.", "") ) * 1000 )
 
         else:
             transfer_fees_new.append(transfer_fees[t])
