@@ -96,7 +96,7 @@ def bio_player_pull(pageSoup, player_id):
         "position": position,
         "height": height,
         "foot": foot,
-        "first_citizenship": first_citizenship
+        "first_citizenship": first_citizenship,
         "second_citizenship": second_citizenship
     }
 
