@@ -20,6 +20,7 @@ def bio_player_pull(pageSoup, player_id):
     age = None
     height = None
     foot = None
+    first_citizenship = None
     second_citizenship = None
 
     for row in pageSoup.select('tr'):
@@ -44,6 +45,9 @@ def bio_player_pull(pageSoup, player_id):
 
             if row.select('th')[0].get_text().strip() == "Foot:":
                 foot = row.select('td')[0].get_text().strip()
+                
+            if row.select('th')[0].get_text().strip() == "Citizenship:":
+                first_citizenship = row.select('td')[0].get_text().strip()
 
         except:
             pass
@@ -92,6 +96,7 @@ def bio_player_pull(pageSoup, player_id):
         "position": position,
         "height": height,
         "foot": foot,
+        "first_citizenship": first_citizenship
         "second_citizenship": second_citizenship
     }
 
