@@ -47,7 +47,7 @@ def bio_player_pull(pageSoup, player_id):
                 foot = row.select('td')[0].get_text().strip()
                 
             if row.select('th')[0].get_text().strip() == "Citizenship:":
-                first_citizenship = row.select('td')[0].get_text().strip()
+                first_citizenship = row.select('td')[0].select('img')[0]['alt']
 
         except:
             pass
