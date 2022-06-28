@@ -20,7 +20,7 @@ setup(
         'bs4==0.0.1',
         'js2xml==0.3.1',
         'pandas>=0.23.4',
-        're>='2.2.1'
+        're>=2.2.1'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
