@@ -13,7 +13,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/FCrSTATS/tyrone_mings",
     package_dir={'tyrone_mings': 'src'},
-    packages=['tyrone-mings'],
+    packages=['tyrone_mings'],
     install_requires=[
         'lxml>=4.5.0',
         'requests>=2.0.0',
