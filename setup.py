@@ -5,7 +5,7 @@ from distutils.core import setup
 
 setup(
     name="tyrone_mings", # Replace with your own username
-    version="1.2",
+    version="1.2.1",
     author="FC rSTATS",
     author_email="me@fcrstats.com",
     description="A package to help pull information from the transfermarkt website",
