@@ -13,14 +13,14 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/FCrSTATS/tyrone_mings",
     package_dir={'tyrone_mings': 'src'},
-    packages=['tyrone_mings'],
+    packages=['tyrone-mings'],
     install_requires=[
         'lxml>=4.5.0',
         'requests>=2.0.0',
         'bs4==0.0.1',
         'js2xml==0.3.1',
         'pandas>=0.23.4',
-        're'>='2.2.1'
+        're>='2.2.1'
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
