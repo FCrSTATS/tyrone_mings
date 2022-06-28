@@ -9,21 +9,39 @@ import warnings
 
 def bio_player_pull(pageSoup, player_id):
 
-############# ADD SECONDARY POSITION INFO #################### #TODO
     ## base info
     player_name = pageSoup.select('h1')[0].get_text().lower()
 
+    headshot_url = None
+    full_name = None
     DOB = None
     POB = None
     COB = None
     position = None
+    position_main = None
+    position_alt1 = None
+    position_alt2 = None
     age = None
     height = None
     foot = None
+    citizenship = None
     second_citizenship = None
+    
+    
+    try:
+        headshot_url = pageSoup.find('div', {'class' : 'dataBild'}).find('img')['src']
+    except:
+        pass
+    
 
     for row in pageSoup.select('tr'):
         try:
+            
+            if row.select('th')[0].get_text().strip() == "Name in home country:":
+                full_name = row.select('td')[0].get_text().strip()
+            
+            if row.select('th')[0].get_text().strip() == "Full name:":
+                full_name = row.select('td')[0].get_text().strip()
 
             if row.select('th')[0].get_text().strip() == "Date of birth:":
                 DOB = row.select('td')[0].get_text().strip()
@@ -41,7 +59,8 @@ def bio_player_pull(pageSoup, player_id):
 
             if row.select('th')[0].get_text().strip() == "Height:":
                 height = int(float(row.select('td')[0].get_text().strip().replace('m', '').replace(',', '.').strip())*100)
-
+            if row.select('th')[0].get_text().strip() == "Position:":
+                position = row.select('td')[0].get_text().strip()
             if row.select('th')[0].get_text().strip() == "Foot:":
                 foot = row.select('td')[0].get_text().strip()
 
@@ -61,6 +80,7 @@ def bio_player_pull(pageSoup, player_id):
             if row.select('th')[0].get_text().strip() == "Citizenship:":
                 no_of_citizenships = len(row.select('td')[0].select('img'))
                 if no_of_citizenships > 1:
+                    citizenship = row.select('td')[0].select('img')[0]['alt']
                     second_citizenship = row.select('td')[0].select('img')[1]['alt']
                 else:
                     second_citizenship = None
@@ -79,9 +99,32 @@ def bio_player_pull(pageSoup, player_id):
         year_of_birth = None
         month_of_birth = None
         day_of_birth = None
+        
+    try:
+        position_data = pageSoup.find('div', {'class' : 'detailpositionen'})
+        try:
+            position_data_main = position_data.find('div', {'class': 'hauptposition-left'}).text
+        except:
+            position_data_main = position_data.find('div', {'class': 'hauptposition-center'}).text
+        position_main = re.findall(':(.*)', position_data_main)[0].strip()
+        
+        position_data_alt = position_data.find('div', {'class': 'nebenpositionen'})
+        position_data_alt = re.split(r'\s{2,}', position_data_alt.text)
+        position_data_alt[0] = position_data_alt[0].strip()
+        position_alt1 = position_data_alt[0].split('\n')[1]
+        position_alt2 = position_data_alt[1] if position_data_alt[1] != '' else position_alt2
+        
+    except:
+        pass
+    
+    
+    
+    
 
     biodict = {
         "player_id": player_id,
+        "headshot_url" : headshot_url,
+        "full_name" : full_name,
         "player_name": player_name,
         "day_of_birth": day_of_birth,
         "month_of_birth": month_of_birth,
@@ -90,8 +133,12 @@ def bio_player_pull(pageSoup, player_id):
         "cob": COB,
         "dob": DOB,
         "position": position,
+        "position_main" : position_main,
+        "position_alt1" : position_alt1,
+        "position_alt2" : position_alt2,
         "height": height,
         "foot": foot,
+        "citizenship" : citizenship,
         "second_citizenship": second_citizenship
     }
 
@@ -116,14 +163,18 @@ def current_football_bio_player_pull(pageSoup, player_id):
 
     else:
         market_value = pageSoup.select('div.dataMarktwert')[0].get_text().split("Last update")[0].strip()
-
-        if "m" in market_value:
-            market_value = int( float(market_value.strip().replace("â‚¬", "").replace("€","").replace("m","")) * 1000000 )
-        elif "Th." in market_value:
-            market_value = int(market_value.strip().replace("â‚¬", "").replace("€","").replace("Th.","")) * 1000
-        elif "-":
+            
+        if 'm' in market_value:
+            market_value_mult = 1000000
+        else:
+            market_value_mult = 1000
+        
+        try:
+            market_value = int(re.sub('€|m|Th.|â‚¬|\$', '', market_value)) * market_value_mult
+        except:
             market_value = 0
-
+    
+    
     joined = None
     contract_expires = None
     contract_option = None
@@ -206,170 +257,97 @@ def current_football_bio_player_pull(pageSoup, player_id):
 def transfer_history_pull(pageSoup, player_id):
 
 
-    transfered_from = []
-    transferred_to = []
+    transferred_from = [] #done
+    transferred_to = [] #done
     market_values = []
     transfer_fees = []
-    transfer_dates = []
-    transfer_season = []
-    country_from = []
-    country_to = []
+    transfer_dates = [] #done
+    transfer_season = [] #done
+    country_from = [] #done
+    country_to = [] #done
 
-    market_values_value = None
-#         print("player transfer history")
-    not_first_row = True
     for box in pageSoup.select('div.box.transferhistorie'):
-        if not_first_row:
-            not_first_row = True
-
-            for row in box.select('tr')[2:]:
-                try:
-                    transfered_from_value = row.select('td')[4].select('a')[0].get('href').split("/")[1].replace("-", " ")
-#                 if transfered_from_value == ""
-                    transfered_from.append(transfered_from_value)
-                except:
-                    pass
-
-            for row in box.select('tr')[2:]:
-                try:
-                    transferred_to_value = row.select('td')[8].select('a')[0].get('href').split("/")[1].replace("-", " ")
-                    transferred_to.append(transferred_to_value)
-                except:
-                    pass
-
-            for row in box.select('tr')[2:]:
-                try:
-                    market_values_value = row.select('td.zelle-mw')[0].get_text()#.select('img')[0].get('alt')
-
-                    if "m" in market_values_value:
-                        market_values_value = int( float(market_values_value.replace("€","").replace("m","")) * 1000000 )
-                    elif "k" in market_values_value:
-                        market_values_value = int(market_values_value.replace("€","").replace("k","")) * 1000
-                    elif "-":
-                        market_values_value = 0
-
-
-
-                    market_values.append(market_values_value)
-                except:
-                    pass
-
-
-        ## grab COUNTRY TO
-            for row in box.select('tr')[2:]:
-                try:
-                    no_images = len(row.select('td')[7].select('img'))
-                    if no_images > 0:
-                        country_to.append(row.select('td')[7].select('img')[0].get('title').lower())
-                    else:
-                        country_to.append("no country")
-                except:
-                    pass
-
-
-        ## grab COUNTRY FROM
-            for row in box.select('tr')[2:]:
-                try:
-                    no_images = len(row.select('td')[3].select('img'))
-                    if no_images > 0:
-                        country_from.append(row.select('td')[3].select('img')[0].get('title').lower())
-                    else:
-                        country_from.append("no country")
-                except:
-                    pass
-
-
-        ## grab TRANSFER FEE
-        for row in box.select('tr')[2:]:
+        tbody = box.find('table').find('tbody')
+        for row in tbody.find_all('tr'):
+            if any(x in row.text for x in ['Upcoming transfer', 'Transfer history']):
+                continue
+            
+            ## grab TRANSFER_DATE and SEASON
+            dates = row.find_all('td', {'class' : 'zentriert'})
+            transfer_season.append(dates[0].text)
+            date_raw = dates[1].text
+            year_of_transfer = int(date_raw[len(date_raw)-4:])
+            month_of_transfer = month_to_number(date_raw.split(" ")[0])
+            day_of_transfer = int(date_raw.split(" ")[1].split(",")[0])
+            transfer_date = datetime.date(year_of_transfer, month_of_transfer, day_of_transfer)
+            transfer_dates.append(transfer_date)
+            
+            ## grab TRANSFERRED FROM and TRANSFERRED TO
+            teams = row.find_all('td', {'class' : 'no-border-rechts vereinswappen'})
+            transferred_from.append(teams[0].find('img', alt=True)['alt'])
+            transferred_to.append(teams[1].find('img', alt=True)['alt'])
+            
+            ## grab COUNTRY TO and COUNTRY FROM
+            countries = row.find_all('td', {'class' : 'no-border-rechts no-border-links flagge'})
             try:
-                transfer_fees_raw = row.select('td.zelle-abloese')[0].get_text()
-                transfer_fees.append(transfer_fees_raw)
+                country_from.append(countries[0].find('img', alt=True)['alt'])
             except:
-                pass
-
-
-        ## grab TRANSFER DATE
-        for row in box.select('tr')[1:]:
+                country_from.append(None)
             try:
-                date_raw = ""
-                date_raw = row.select('td.show-for-small')[0].get_text().strip()#.get_text())#.select('img')[0].get('alt')
-                if 'Date' in date_raw:
-
-                    date_raw = date_raw.split(": ")[1]
-                    year_of_transfer = int(date_raw[len(date_raw)-4:])
-                    month_of_transfer = month_to_number(date_raw.split(" ")[0])
-                    day_of_transfer = int(date_raw.split(" ")[1].split(",")[0])
-                    transfer_date = datetime.date(year_of_transfer, month_of_transfer, day_of_transfer)
-                    transfer_dates.append(transfer_date)
+                country_to.append(countries[1].find('img', alt=True)['alt'])
             except:
-                pass
+                country_to.append(None)
+                
+                
+            market_values.append(row.find('td', {'class' : 'zelle-mw'}).text)
+            transfer_fees.append(row.find('td', {'class' : 'zelle-abloese'}).text)
+            
+    
+    ## edit market value
+    market_values_mult = []
+    market_values_new = []
 
-        ## grab SEASON
-        for row in box.select('tr')[1:]:
-            try:
-                season_raw = row.select('td')[0].get_text().strip()
-                if "Date" in season_raw:
-                    pass
-                else:
-                    if "Total" in season_raw:
-                        pass
-                    else:
-                        if "/" in season_raw:
-                            transfer_season.append(season_raw.strip())
-            except:
-                pass
-    ## edit the transfer fees / types
-
-    transfer_types = ['loan' if "oan" in f else 'transfer' for f in transfer_fees]
-
-
-    transfer_fees_new = []
-
-    for t in range(len(transfer_fees)):
-
-        if transfer_fees[t] == "-":
-            transfer_fees_new.append(0)
-
-        elif transfer_fees[t] == "Loan":
-            transfer_fees_new.append(0)
-
-        elif transfer_fees[t] == "End of loan":
-            transfer_fees_new.append(0)
-
-        elif transfer_fees[t] == "Free transfer":
-            transfer_fees_new.append(0)
-
-        elif "Loan fee:" in transfer_fees[t]:
-            if "m" in transfer_fees[t]:
-                transfer_fees_new.append( int( float( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("m", "") ) * 1000000 ) )
-            else:
-                transfer_fees_new.append( int( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("k", "") ) * 1000 )
-
-        elif transfer_fees[t] == "?":
-            transfer_fees_new.append(market_values[t])
-
-        elif "m" in transfer_fees[t]:
-            transfer_fees_new.append( int( float( transfer_fees[t].replace("€", "").replace("m", "") ) * 1000000 ) )
-
-        elif "k" in transfer_fees[t]:
-            transfer_fees_new.append( int( transfer_fees[t].replace("Loan fee:", "").replace("€", "").replace("k", "") ) * 1000 )
-
+    for t in range(len(market_values)):
+        if market_values[t] == "-":
+            market_values_new.append(0)
+            market_values_mult.append(0)
         else:
-            transfer_fees_new.append(transfer_fees[t])
-
-
+            market_values_mult.append(1000000 if market_values[t][-1] == 'm' else 1000)
+            market_values_new.append(float(re.sub('€|m|Th.|â‚¬|\$', '', market_values[t])) * market_values_mult[t])
+        
+    
+    ## edit transfer fees / types
+    
+    transfer_types = ['loan' if "oan" in f else 'transfer' for f in transfer_fees]
+    
+    transfer_fees_mult = []
+    transfer_fees_new = []
+    
+    for t in range(len(transfer_fees)):
+        transfer_fees_mult.append(1000000 if transfer_fees[t][-1] == 'm' else 1000)
+        
+        if transfer_fees[t] in ["-", "free transfer", "loan transfer", "End of loan", "draft"]:
+            transfer_fees_new.append(0)
+            transfer_fees_mult.append(0)
+        else:
+            if transfer_fees[t] == "?":
+                transfer_fees_new.append(market_values_new[t])
+            else:
+                transfer_fees_new.append(float(re.sub('Loan fee:|€|m|Th.|â‚¬|\$', '', transfer_fees[t])) * transfer_fees_mult[t])
+         
+    
     ## check internal
-
+    
     internal_transfer = []
-
-    for t in range(len(transfered_from)):
-        if remove_youth(transfered_from[t]) == remove_youth(transferred_to[t]):
+    
+    for t in range(len(transferred_from)):
+        if remove_youth(transferred_from[t]) == remove_youth(transferred_to[t]):
             internal_transfer.append("internal")
         else:
             internal_transfer.append("external")
-
-    country_from = country_from[:-1]
-
+        
+    ## age at transfer
+    
     DOB = None
 
     for row in pageSoup.select('tr'):
@@ -378,21 +356,20 @@ def transfer_history_pull(pageSoup, player_id):
                 DOB = row.select('td')[0].get_text().strip()
         except:
             pass
-
-    # age at transfer
+    
     if DOB != None:
         DOB = DOB.replace(" Happy Birthday", "")
         year_of_birth = int(DOB[len(DOB)-4:])
         month_of_birth = month_to_number(DOB.split(" ")[0])
         day_of_birth = int(DOB.split(" ")[1].split(",")[0])
         DOB = datetime.date(year_of_birth, month_of_birth, day_of_birth)
-
+    
     age_at_transfer = [calculate_age_at_transfer(DOB, f) for f in transfer_dates]
-
+    
     player_view = pd.DataFrame(
-    {'transfered_from': transfered_from,
+    {'transferred_from': transferred_from,
      'transferred_to': transferred_to,
-     'market_values': market_values,
+     'market_values': market_values_new,
      'transfer_fees': transfer_fees_new,
      'transfer_dates': transfer_dates,
      'transfer_season': transfer_season,
@@ -404,8 +381,8 @@ def transfer_history_pull(pageSoup, player_id):
     })
 
     player_view['player_id'] = player_id
-
-
+    
+    
     ####  ADD YOUTH CLUBS ######################################################
     youth_clubs = None
     try:
@@ -425,16 +402,18 @@ def transfer_history_pull(pageSoup, player_id):
     #             print(f.split(" (")[0].strip().lower(), remove_youth(f.split(" (")[0].strip().lower()))
             youth_clubs_list__.append(remove_youth(f.split(" (")[0].strip().lower()))
 
-    if len(player_view[player_view['age_at_transfer'] <= 18].transfered_from) > 0:
-        youth_clubs_list__ = youth_clubs_list__ + [remove_youth(ff) for ff in player_view[player_view['age_at_transfer'] <= 18].transfered_from]
+    if len(player_view[player_view['age_at_transfer'] <= 18].transferred_from) > 0:
+        youth_clubs_list__ = youth_clubs_list__ + [remove_youth(ff) for ff in player_view[player_view['age_at_transfer'] <= 18].transferred_from]
 
     if len(youth_clubs_list__) > 0:
         player_view['all_youth_clubs'] = ','.join(map(str, list(set(youth_clubs_list__))))
     #         print(','.join(map(str, list(set(youth_clubs_list__)))) )
     else:
-        player_view['all_youth_clubs'] = remove_youth(player_view.tail(1).iloc[0]['transfered_from'])
+        player_view['all_youth_clubs'] = remove_youth(player_view.tail(1).iloc[0]['transferred_from'])
+        
+        
+    return player_view
 
-    return(player_view)
 
 
 def performance_history_pull(base_url, player_id, player_dob):
@@ -883,3 +862,4 @@ def squad_number_history(base_url, squad_type = "both"):
     return squad_df    
     
     
+
