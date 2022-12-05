@@ -92,27 +92,18 @@ def month_to_number(month_string):
     '''
     a helper to change month abbreviations to month numbers
     '''
-    if month_string == "Jan":
-        return(1)
-    elif month_string == "Feb":
-        return(2)
-    elif month_string == "Mar":
-        return(3)
-    elif month_string == "Apr":
-        return(4)
-    elif month_string == "May":
-        return(5)
-    elif month_string == "Jun":
-        return(6)
-    elif month_string == "Jul":
-        return(7)
-    elif month_string == "Aug":
-        return(8)
-    elif month_string == "Sep":
-        return(9)
-    elif month_string == "Oct":
-        return(10)
-    elif month_string == "Nov":
-        return(11)
-    elif month_string == "Dec":
-        return(12)
+    month_map = {
+        "Jan": 1,
+        "Feb": 2,
+        "Mar": 3,
+        "Apr": 4,
+        "May": 5,
+        "Jun": 6,
+        "Jul": 7,
+        "Aug": 8,
+        "Sep": 9,
+        "Oct": 10,
+        "Nov": 11,
+        "Dec": 12,
+    }
+    return month_map[month_string]
