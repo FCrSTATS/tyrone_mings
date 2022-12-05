@@ -30,34 +30,9 @@ def remove_youth(team_string):
     this function takes a team string and returns the team string without youth
     variations
     '''
-    team_string = team_string.replace("U15", "")
-    team_string = team_string.replace("U16", "")
-    team_string = team_string.replace("U17", "")
-    team_string = team_string.replace("U18", "")
-    team_string = team_string.replace("U19", "")
-    team_string = team_string.replace("U20", "")
-    team_string = team_string.replace("U21", "")
-    team_string = team_string.replace("U22", "")
-    team_string = team_string.replace("U23", "")
-    team_string = team_string.replace("u15", "")
-    team_string = team_string.replace("u16", "")
-    team_string = team_string.replace("u17", "")
-    team_string = team_string.replace("u18", "")
-    team_string = team_string.replace("u19", "")
-    team_string = team_string.replace("u20", "")
-    team_string = team_string.replace("u21", "")
-    team_string = team_string.replace("u22", "")
-    team_string = team_string.replace("u23", "")
-    team_string = team_string.replace("II", "")
-    team_string = team_string.replace("ii", "")
-    team_string = team_string.replace("Youth", "")
-    team_string = team_string.replace("jugend", "")
-    team_string = team_string.replace("Academy", "")
-    team_string = team_string.replace("Academia", "")
-    team_string = team_string.replace("B \(liq.\)", "")
-    team_string = team_string.replace("C \(liq.\)", "")
-    team_string = team_string.strip()
-    return(team_string)
+    pattern = r"U\d\d?|u\d\d?|II|ii|Youth|jugend|Academy|Academia|B \(liq.\)|C \(liq.\)"
+    team_string = re.sub(pattern, "", team_string)
+    return team_string.strip()
 
 
 def calculate_age_at_transfer(born, transfer_date):
